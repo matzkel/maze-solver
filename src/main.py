@@ -11,6 +11,8 @@ def main():
     cell_b = Cell(Point(80, 80), Point(128, 368), window)
     cell_b.draw()
 
+    cell_a.draw_move(cell_b)
+
     window.wait_for_close()
 
 if __name__ == "__main__":
