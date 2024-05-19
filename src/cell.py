@@ -1,8 +1,8 @@
-from graphics import Line, Point
+from graphics import Window, Line, Point
 
 
 class Cell():
-    def __init__(self, point_a, point_b, window):
+    def __init__(self, point_a=None, point_b=None, window=None):
         # Left, Right, Top, Bottom 
         self.walls = [True, True, True, True]
         
@@ -14,6 +14,14 @@ class Cell():
         self.__window = window
     
     def draw_move(self, to_cell, undo=False):
+        if not isinstance(self.__point_a, Point):
+            raise TypeError("point_a argument must be a 'Point'")
+        if not isinstance(self.__point_b, Point):
+            raise TypeError("point_b argument must be a 'Point'")
+        
+        if not isinstance(self.__window, Window):
+            raise TypeError("window argument must be a 'Window'")
+
         fill_color = "gray" if undo else "red"
 
         # The center of the cell is the midpoint
@@ -33,6 +41,18 @@ class Cell():
         self.__window.draw_line(line, fill_color)
 
     def draw(self):
+        if not isinstance(self.__point_a, Point):
+            raise TypeError("point_a argument must be a 'Point'")
+        if not isinstance(self.__point_b, Point):
+            raise TypeError("point_b argument must be a 'Point'")
+
+        if not isinstance(self.__window, Window):
+            raise TypeError("window argument must be a 'Window'")
+        
+        for wall in self.walls:
+            if not isinstance(wall, bool):
+                raise TypeError("list indices must be booleans")
+        
         # Left wall
         if self.walls[0]:
             line = Line(

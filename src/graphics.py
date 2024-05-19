@@ -9,6 +9,16 @@ class Window():
         self.__root.title("Maze Solver")
         self.__root.protocol("WM_DELETE_WINDOW", self._close)
 
+        if not isinstance(width, int):
+            raise TypeError("width argument must be an integer")
+        if width < 0:
+            raise ValueError("width argument must be a greater than 0")
+        
+        if not isinstance(height, int):
+            raise TypeError("height argument must be an integer")
+        if height < 0:
+            raise ValueError("height argument must be greater than 0")
+
         # Account for border width of lines
         self._width = width + 2
         self._height = height + 2
@@ -23,6 +33,9 @@ class Window():
         self.__canvas.pack(fill=BOTH, expand=1)
 
     def draw_line(self, line, fill_color):
+        if not isinstance(line, Line):
+            raise TypeError("line argument must be a 'Line'")
+
         line._draw(self.__canvas, fill_color)
 
     def _redraw(self):
@@ -40,7 +53,12 @@ class Window():
 
 class Line():
     def __init__(self, point_a, point_b):
+        if not isinstance(point_a, Point):
+            raise TypeError("point_a argument must be a 'Point'")
         self.__point_a = point_a
+
+        if not isinstance(point_b, Point):
+            raise TypeError("point_b argument must be a 'Point'")
         self.__point_b = point_b
 
     def _draw(self, canvas, fill_color):
