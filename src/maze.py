@@ -41,7 +41,9 @@ class Maze():
             for row in range(self.__rows):
                 self._draw_cell(col, row)
 
-    def _draw_cell(self, i, j):
+        self._break_entrance_and_exit()
+
+    def _draw_cell(self, i, j, walls=None):
         if not isinstance(self.__window, Window):
             raise TypeError("window argument must be a 'Window'")
 
@@ -56,6 +58,10 @@ class Maze():
                 self.__height - self.__cell_size_y * (j + 1)
             ), self.__window
         )
+
+        if walls:
+            cell.walls = walls
+
         self._cells[i][j] = cell
 
         self._cells[i][j].draw()
@@ -67,3 +73,10 @@ class Maze():
 
         self.__window._redraw()
         sleep(0.02)
+
+    def _break_entrance_and_exit(self):
+        walls = [True, True, False, True]
+        self._draw_cell(0, 0, walls)
+
+        walls = [True, True, True, False]
+        self._draw_cell(self.__cols - 1, self.__rows - 1, walls)

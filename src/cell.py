@@ -49,6 +49,9 @@ class Cell():
         if not isinstance(self.__window, Window):
             raise TypeError("window argument must be a 'Window'")
         
+        if not isinstance(self.walls, list):
+            raise TypeError("walls argument must be a list of booleans")
+
         for wall in self.walls:
             if not isinstance(wall, bool):
                 raise TypeError("list indices must be booleans")
@@ -60,6 +63,12 @@ class Cell():
                 Point(self.__point_a.x, self.__point_b.y)
             )
             self.__window.draw_line(line, "black")
+        else:
+            line = Line(
+                self.__point_a,
+                Point(self.__point_a.x, self.__point_b.y)
+            )
+            self.__window.draw_line(line, "white")
         # Right wall
         if self.walls[1]:
             line = Line(
@@ -67,6 +76,12 @@ class Cell():
                 self.__point_b
             )
             self.__window.draw_line(line, "black")
+        else:
+            line = Line(
+                Point(self.__point_b.x, self.__point_a.y),
+                self.__point_b
+            )
+            self.__window.draw_line(line, "white")
         # Top wall
         if self.walls[2]:
             line = Line(
@@ -74,6 +89,12 @@ class Cell():
                 Point(self.__point_b.x, self.__point_a.y)
             )
             self.__window.draw_line(line, "black")
+        else:
+            line = Line(
+                self.__point_a,
+                Point(self.__point_b.x, self.__point_a.y)
+            )
+            self.__window.draw_line(line, "white")
         # Bottom wall
         if self.walls[3]:
             line = Line(
@@ -81,3 +102,9 @@ class Cell():
                 self.__point_b
             )
             self.__window.draw_line(line, "black")
+        else:
+            line = Line(
+                Point(self.__point_a.x, self.__point_b.y),
+                self.__point_b
+            )
+            self.__window.draw_line(line, "white")
