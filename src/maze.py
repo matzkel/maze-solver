@@ -1,11 +1,12 @@
 from time import sleep
+import random
 
 from graphics import Window, Point
 from cell import Cell
 
 
 class Maze():
-    def __init__(self, rows, cols, window=None):
+    def __init__(self, rows, cols, seed=None, window=None):
         self._cells = []
 
         if not isinstance(rows, int):
@@ -20,6 +21,9 @@ class Maze():
 
         self.__rows = rows
         self.__cols = cols
+
+        if seed:
+            self.__seed = random.seed(seed)
 
         self.__window = window
         if isinstance(self.__window, Window):
@@ -42,8 +46,9 @@ class Maze():
                 self._draw_cell(col, row)
 
         self._break_entrance_and_exit()
+        self._break_walls_r(0, 0)
 
-    def _draw_cell(self, i, j, walls=None):
+    def _draw_cell(self, i, j):
         if not isinstance(self.__window, Window):
             raise TypeError("window argument must be a 'Window'")
 
@@ -59,8 +64,8 @@ class Maze():
             ), self.__window
         )
 
-        if walls:
-            cell.walls = walls
+        cell.walls = self._cells[i][j].walls
+        cell.visited = self._cells[i][j].visited
 
         self._cells[i][j] = cell
 
@@ -75,8 +80,39 @@ class Maze():
         sleep(0.02)
 
     def _break_entrance_and_exit(self):
-        walls = [True, True, False, True]
-        self._draw_cell(0, 0, walls)
+        walls = self._cells[0][0].walls
+        walls[2] = False
+        self._draw_cell(0, 0)
 
-        walls = [True, True, True, False]
-        self._draw_cell(self.__cols - 1, self.__rows - 1, walls)
+        walls = self._cells[self.__cols - 1][self.__rows - 1].walls
+        walls[3] = False
+        self._draw_cell(self.__cols - 1, self.__rows - 1)
+
+    def _break_walls_r(self, i, j):
+        self._cells[i][j].visited = True
+        while True:
+            adj_cells = []
+
+            # Left cell
+            if i - 1 >= 0 and self._cells[i - 1][j].visited is False:
+                adj_cells.append((i - 1, j, 0, 1))
+            # Right cell
+            if i + 1 < self.__cols and self._cells[i + 1][j].visited is False:
+                adj_cells.append((i + 1, j, 1, 0))
+            # Top cell
+            if j + 1 < self.__rows and self._cells[i][j + 1].visited is False:
+                adj_cells.append((i, j + 1, 3, 2))
+            # Bottom cell
+            if j - 1 >= 0 and self._cells[i][j - 1].visited is False:
+                adj_cells.append((i, j - 1, 2, 3))
+            
+            if not adj_cells:
+                self._draw_cell(i, j)
+                return
+
+            next_cell = adj_cells[random.randrange(len(adj_cells))]
+
+            self._cells[i][j].walls[next_cell[2]] = False
+            self._cells[next_cell[0]][next_cell[1]].walls[next_cell[3]] = False
+
+            self._break_walls_r(next_cell[0], next_cell[1])

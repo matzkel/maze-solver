@@ -5,6 +5,7 @@ class Cell():
     def __init__(self, point_a=None, point_b=None, window=None):
         # Left, Right, Top, Bottom 
         self.walls = [True, True, True, True]
+        self.visited = False
         
         # Top-left corner
         self.__point_a = point_a
