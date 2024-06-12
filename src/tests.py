@@ -4,9 +4,11 @@ import unittest
 from maze import Maze
 
 
+@mock.patch("maze.Maze._draw_cell")
+@mock.patch("maze.Maze._break_entrance_and_exit")
+@mock.patch("maze.Maze._break_walls_r")
 class MazeTests(unittest.TestCase):
-    @mock.patch("maze.Maze._draw_cell")
-    def test_maze_create_cells(self, _):
+    def test_maze_create_cells(self, *argv):
         rows = 10
         cols = 12
 
@@ -20,8 +22,7 @@ class MazeTests(unittest.TestCase):
             cols
         )
 
-    @mock.patch("maze.Maze._draw_cell")
-    def test_maze_create_cells_large(self, _):
+    def test_maze_create_cells_large(self, *argv):
         rows = 128
         cols = 192
 
@@ -35,13 +36,13 @@ class MazeTests(unittest.TestCase):
             cols
         )
 
-    def test_maze_negative_arg(self):
+    def test_maze_negative_arg(self, *argv):
         rows = -10
         cols = -12
 
         self.assertRaises(ValueError, Maze, rows, cols)
 
-    def test_maze_wrong_arg_type(self):
+    def test_maze_wrong_arg_type(self, *argv):
         rows = "12"
         cols = True
 
