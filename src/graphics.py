@@ -75,4 +75,4 @@ class Line():
 class Point():
     def __init__(self, x, y):
         self.x = x # x = 0 is the left of the screen
-        self.y = y # y = 0 is the top of the screen
+        self.y = y # y = 0 is the bottom of the screen
